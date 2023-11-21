@@ -25,6 +25,7 @@
         <log4j.version>2.20.0</log4j.version>
         <applicationinsights.version>2.6.4</applicationinsights.version>
         <azure-active-directory.version>2.2.4</azure-active-directory.version>
+        <azure-applicationinsights-runtime.version>3.4.18</azure-applicationinsights-runtime.version>
         <spring-cloud-azure-starter.version>4.6.0</spring-cloud-azure-starter.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
     </properties>
@@ -115,6 +116,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>applicationinsights-runtime-attach</artifactId>
+            <version>${azure-applicationinsights-runtime.version}</version>
         </dependency>
 
         <dependency>
