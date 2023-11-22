@@ -15,6 +15,10 @@ import com.chtrembl.petstoreapp.model.WebRequest;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.microsoft.applicationinsights.extensibility.context.SessionContext;
+import com.microsoft.applicationinsights.extensibility.context.UserContext;
+import com.microsoft.applicationinsights.telemetry.EventTelemetry;
+import com.microsoft.applicationinsights.telemetry.MetricTelemetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -42,6 +46,7 @@ public class PetStoreServiceImpl implements PetStoreService {
 	private final ContainerEnvironment containerEnvironment;
 	private final WebRequest webRequest;
 
+	private TelemetryClient telemetry = new TelemetryClient();
 	private WebClient petServiceWebClient = null;
 	private WebClient productServiceWebClient = null;
 	private WebClient orderServiceWebClient = null;
@@ -119,6 +124,10 @@ public class PetStoreServiceImpl implements PetStoreService {
 
 	@Override
 	public Collection<Product> getProducts(String category, List<Tag> tags) {
+		telemetry.getContext().getUser().setId("Test user id");
+		telemetry.getContext().getSession().setId("01234-56789-0000-0000-1111");
+    telemetry.trackMetric("Custom test metric", 9999);
+
 		List<Product> products = new ArrayList<>();
 
 		try {
@@ -148,6 +157,8 @@ public class PetStoreServiceImpl implements PetStoreService {
 				products = products.stream().filter(product -> category.equals(product.getCategory().getName())
 						&& product.getTags().toString().contains("small")).collect(Collectors.toList());
 			}
+
+			logger.info("### Number of items returned: " + products.size());
 			return products;
 		} catch (
 
